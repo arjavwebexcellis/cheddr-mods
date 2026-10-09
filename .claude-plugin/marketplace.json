@@ -1,0 +1,9 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "cheddr-mods",
+  "description": "Project-specific Claude Code mods for the Cheddr platform",
+  "owner": {
+    "name": "arjavwebexcellis"
+  },
+  "plugins": []
+}
