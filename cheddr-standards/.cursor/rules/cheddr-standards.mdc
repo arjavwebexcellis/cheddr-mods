@@ -1,0 +1,14 @@
+---
+description: Cheddr engineering standards — code discipline, review conventions, test gates
+globs: **/*
+alwaysApply: true
+---
+
+See AGENTS.md in the project root for the full standard.
+
+Key rules:
+- Laziness ladder before writing code
+- Every review finding must cite existing code
+- Test authoring gate: 4 questions before adding a test
+- Verification loop: plan → change → verify → ready
+- Reviews are local only
