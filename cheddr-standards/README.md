@@ -2,6 +2,35 @@
 
 Engineering standards for Cheddr: convention-aware reviews, verification loops, model-routed agents.
 
+## Agent Support
+
+These standards work with any AI coding agent:
+
+| Agent | How it loads |
+|---|---|
+| Claude Code | Plugin install + AGENTS.md |
+| Codex | AGENTS.md auto-loaded |
+| Cursor | `.cursor/rules/cheddr-standards.mdc` |
+| GitHub Copilot | `.github/copilot-instructions.md` |
+| Windsurf | `.windsurf/rules/` |
+| Cline | `.clinerules/` |
+| Kiro | `.kiro/steering/` |
+| Amp (Sourcegraph) | AGENTS.md auto-loaded |
+| Jules (Google) | AGENTS.md auto-loaded |
+| CodeWhale | AGENTS.md auto-loaded |
+| Swival | AGENTS.md auto-loaded |
+
+**Minimal setup (any agent):** Copy `AGENTS.md` to your project root. Done.
+
+For Cursor, Copilot, Windsurf, Cline or Kiro, also copy that agent's adapter folder (e.g. `.cursor/`) to your project root — each adapter points at the root `AGENTS.md`.
+
+**Full setup (Claude Code):**
+```bash
+claude plugin marketplace add arjavwebexcellis/cheddr-mods
+claude plugin install cheddr-standards@cheddr-mods
+cp CLAUDE.md.template ./CLAUDE.md
+```
+
 ## Install
 
 ```bash
