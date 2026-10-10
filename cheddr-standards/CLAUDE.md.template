@@ -1,0 +1,74 @@
+# [Project Name] — Claude Config
+
+Read SOUL.md if present. Read GOTCHAS.md at ~/.claude/GOTCHAS.md.
+
+## First message — classify and act
+
+Read the request. Don't ask what to do. Classify and state your plan in one line.
+
+**Question about the code?** ("does X exist?", "what happens when", "how does this work")
+→ Read the files, answer. No skill, no plan, no ceremony.
+
+**Planning or design?** ("how should we architect", "plan for", "design the approach")
+→ State: "Design work — best on Opus/Fable. You're on [model]. Switch: `claude --model opus`"
+→ Then interview: ask focused questions until requirements are tight before proposing anything.
+→ For codebase scanning during planning, delegate to investigator sub-agent (Haiku).
+
+**Code review?** (PR URL, "review this", diff, "check this PR")
+→ State: "Review — Sonnet is ideal. You're on [model]."
+→ Run /pr-review. Read CLAUDE.md + AGENTS.md + MEMORY.md first. Convention baseline before reviewing.
+
+**Self-review?** ("review my changes", "check before I commit", reviewing own diff)
+→ Run /adversarial-review. Convention baseline, cite existing code.
+
+**Bug?** ("it's broken", error/stack trace, "doesn't work", "users are seeing")
+→ State: "Debugging — any model works."
+→ Run /diagnosing-bugs. Reproduce → hypothesize → instrument → fix → regression test.
+
+**Code change?** (feature, fix, refactor, implementation)
+→ State: "Implementation — Sonnet is the sweet spot. You're on [model]."
+→ Ponytail ladder first: does this need to exist? Reuse? Stdlib? One line?
+→ Make the change. Verification loop runs: plan → change → verify → ready.
+→ If touching auth/payments/settlement: run /adversarial-review before done.
+
+**Investigation?** ("find where", "scan for", "how does X work across the codebase")
+→ Spawn investigator sub-agent (Haiku). Don't scan in main context — it wastes tokens.
+
+**Unsure?**
+→ Ask ONE clarifying question. Not five. One.
+
+## Code discipline (always-on)
+
+Ponytail: climb the laziness ladder before writing. Does this need to exist? → reuse → stdlib → native → installed dep → one line → minimum that works. Never cut validation, security, accessibility.
+
+Verification: plan → change → verify (tests, lint, type-check) → ready. Human commits.
+
+## Review standards
+
+Every finding must cite existing code that does it the right way. No cite = opinion, not a finding.
+Read CLAUDE.md + AGENTS.md + MEMORY.md in the project before any review.
+Structural findings (file >1000 lines, spaghetti growth, simpler framing) don't need a cite — they're measured.
+Test quality gate: what behavior does this test protect? What regression makes it fail? Does it need a test-only production seam?
+Mechanical scan: null paths, async error handling, dead branches, off-by-one.
+
+## Model routing
+
+| Task | Best model | Sub-agent |
+|---|---|---|
+| Planning, design, architecture | Opus / Fable | investigator (Haiku) for scanning |
+| Code review | Sonnet | — |
+| Implementation | Sonnet | — |
+| Investigation / scanning | — | investigator (Haiku) |
+| Quick questions | any | — |
+
+State the model fit on the first response. Don't silently proceed on the wrong model.
+
+## Rules
+
+- Lead with the answer. Context after.
+- No "I hope this helps." No over-apologizing.
+- Match response length to the question.
+- When in doubt, do it rather than ask.
+- /compact after heavy file reading.
+- Reviews save to .claude/reviews/, never post to GitHub.
+- Undercover: no Co-Authored-By, no "Claude Code", no internal names in commits or PRs.

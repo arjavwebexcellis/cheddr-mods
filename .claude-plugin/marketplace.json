@@ -5,5 +5,12 @@
   "owner": {
     "name": "arjavwebexcellis"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "cheddr-standards",
+      "source": "./cheddr-standards",
+      "description": "Engineering standards for Cheddr — convention-aware reviews, verification loops, model-routed agents.",
+      "version": "1.0.0"
+    }
+  ]
 }
