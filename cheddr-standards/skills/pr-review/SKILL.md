@@ -69,15 +69,41 @@ Structural and size findings (file too big, simpler framing, spaghetti growth) d
 
 Severity: CRITICAL (data/money loss, auth bypass, PII exposure, prod break) · WARNING (bug under plausible conditions, or convention violation with a cite) · NOTE (style, uncited observation, question). **APPROVE means merge as-is.**
 
-## Output
+## Step 3 — Output
 
-Render using `template.html` (in this skill's directory) exactly — do not inline or reinvent the template; fill its placeholders. Write to:
+Write the review as markdown first, then have the answer-me-with-html plugin convert it to a polished HTML page. Don't write HTML manually.
 
-- `.claude/reviews/pr-<number>/round-<N>.html`
-- `.claude/reviews/pr-<number>/meta.json` — round number, date, PR number, verdict, findings summary (for the next round to read)
+1. Save the markdown to `.claude/reviews/pr-<number>/round-<N>.md`.
+2. Invoke the answer-me-with-html skill to render that file next to it: `am render .claude/reviews/pr-<number>/round-<N>.md -o .claude/reviews/pr-<number>/round-<N>.html --no-open --style off` (`--style off`: review wording is not rewritten for the STE check). If the plugin isn't installed, the markdown alone is the review.
+3. Update `.claude/reviews/pr-<number>/meta.json` — round number, date, PR number, verdict, findings summary (for the next round to read).
 
 N is the next integer after the highest existing round in that directory (round 1 if none).
 
+Review markdown format:
+
+````markdown
+---
+title: "PR #<number>: <title>"
+---
+Author: <name> | Stack: <stack> | Size: +<add>/-<del>
+Verdict: APPROVE / REQUEST CHANGES / NEEDS DISCUSSION
+
+## Convention Baseline
+[bullets from Step 1]
+
+## Findings
+| # | File:Line | Issue | Convention (cite) | Impact | Severity | Priority | Fix |
+
+## Impact Analysis
+Callers affected, dependencies changed, breaking changes
+
+## What's Good
+[genuine positives]
+
+## Questions for Author
+[intent, trade-offs]
+````
+
 ## Re-review mode
 
-Read the prior round's `meta.json` and HTML. Fetch only the NEW diff since that round (`gh pr diff`, compared against what the prior round covered). For each prior finding, mark: **FIXED** / **NOT ADDRESSED** / **REGRESSED**. Add any findings newly introduced by the new commits. Write as the next `round-<N>.html` + updated `meta.json`. Don't re-review unchanged code.
+Read the prior round's `meta.json` and markdown. Fetch only the NEW diff since that round (`gh pr diff`, compared against what the prior round covered). For each prior finding, mark: **FIXED** / **NOT ADDRESSED** / **REGRESSED**. Add any findings newly introduced by the new commits. Write as the next `round-<N>.md` (rendered to `round-<N>.html` as in Step 3) + updated `meta.json`. Don't re-review unchanged code.

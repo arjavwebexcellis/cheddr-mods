@@ -76,15 +76,30 @@ Don't settle for "this could be cleaner." Look for the move that makes the code 
 
 Structural and size findings (file too big, simpler framing, spaghetti growth) don't require a cite — they're measured, not convention-compared.
 
-## Output
+## Step 4 — Output
 
-First line: `Verdict: <BLOCK|CONCERNS|CLEAN> — <single most important fix>`
-
-Then:
-- **Convention baseline** — the 3–5 bullets from Step 1
-- **Findings**, each with: `file:line` · convention violated · cite of existing code doing it right (`file:line`) · severity (CRITICAL / WARNING / NOTE) · concrete fix
-- **Verified OK** — what you checked and cleared (always present, especially on CLEAN)
-
-Verdict rules: any CRITICAL → BLOCK · any WARNING → CONCERNS · only NOTEs or nothing → CLEAN.
+Write the review as markdown. If the output is complex enough (several findings, or a table), invoke the answer-me-with-html skill to convert it to HTML next to the markdown: `am render <file>.md -o <file>.html --no-open --style off`. Don't write HTML manually.
 
 Save to `.claude/reviews/self-YYYY-MM-DD-<slug>.md`. Never to `docs/`. Review only — do not fix.
+
+Format:
+
+````markdown
+# Self-review — [description] (`<commit>`)
+Verdict: CLEAN / CONCERNS / BLOCK — [reason]
+
+## Convention baseline
+[bullets, citing sampled files]
+
+## Findings
+### N. SEVERITY · `file:line` — [title]
+[Description. Convention violated. Cite. Fix.]
+
+## Verified OK
+[checked and cleared items]
+
+## Deliberate Non-Changes
+[what was considered but not changed, with reasoning]
+````
+
+Verdict rules: any CRITICAL → BLOCK · any WARNING → CONCERNS · only NOTEs or nothing → CLEAN.

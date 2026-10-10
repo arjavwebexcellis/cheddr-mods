@@ -47,7 +47,7 @@ Update later with `claude plugin marketplace update cheddr-mods`.
 | Skill | Use |
 |---|---|
 | `/adversarial-review` | Self-review your own diff before committing. Learns the codebase's conventions first; every finding cites existing code. Saves to `.claude/reviews/`. |
-| `/pr-review <number>` | Review someone else's PR. Convention baseline, cited findings, round-based re-reviews. Local only — never posts to GitHub. Output: `.claude/reviews/pr-<number>/round-<N>.html`. |
+| `/pr-review <number>` | Review someone else's PR. Convention baseline, cited findings, round-based re-reviews. Local only — never posts to GitHub. Output: `.claude/reviews/pr-<number>/round-<N>.md` (+ `.html` with answer-me-with-html). |
 | `/verify-loop` | Plan → change → verify (type-check, lint, tests, build, smoke) → ready. Inapplicable steps are marked N/A, never silently skipped. |
 
 ### Agents
@@ -60,6 +60,17 @@ Update later with `claude plugin marketplace update cheddr-mods`.
 | `review-deep` | Sonnet | Complex, security-sensitive or financial changes. |
 
 `investigator` and `reviewer` also list MCP tools from the `claude-mem` and `context-mode` plugins. Install those plugins for the full toolset.
+
+### Optional: HTML review output
+
+The review skills write markdown. With [answer-me-with-html](https://github.com/QingYunA/answer-me-with-html) installed (needs Node.js 20+), they also render each review to an HTML page next to the markdown. Without it, you get markdown only.
+
+```bash
+claude plugin marketplace add QingYunA/answer-me-with-html
+claude plugin install answer-me-with-html@answer-me-with-html
+```
+
+Note: answer-me-with-html also offers HTML pages for other answers (explanations, comparisons) on its own. Turn off auto-open with `/answer-me-with-html:config open off`.
 
 ## Setup
 
