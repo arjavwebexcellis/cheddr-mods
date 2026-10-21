@@ -33,6 +33,7 @@ cp ~/.claude/plugins/marketplaces/cheddr-mods/cheddr-standards/CLAUDE.md.templat
 | `/pr-review <number>` | PR review for other devs' code. Auto-detects frontend/backend. Round-based with re-review mode. HTML output via answer-me-with-html. LOCAL ONLY — never posts to GitHub. |
 | `/verify-loop` | Verification loop for code changes. Plan → change → verify (tests, lint, type-check) → ready. Stack-aware — detects JS/TS, build steps, test wiring, DB reachability. |
 | `/lean-audit` | Find code that shouldn't exist. Climbs the laziness ladder: does it need to exist → reuse → stdlib → one line. Returns a prioritized delete-list. |
+| `/security-check` | Security audit on changes or full codebase. Routes to relevant attack classes. Wraps Cloudflare's security-audit skill. Runs automatically on prod PR reviews. |
 
 ### Agents
 
@@ -110,7 +111,8 @@ cheddr-standards/
 │   ├── adversarial-review/SKILL.md
 │   ├── pr-review/SKILL.md
 │   ├── verify-loop/SKILL.md
-│   └── lean-audit/SKILL.md
+│   ├── lean-audit/SKILL.md
+│   └── security-check/SKILL.md
 ├── agents/
 │   ├── investigator.md
 │   ├── reviewer.md

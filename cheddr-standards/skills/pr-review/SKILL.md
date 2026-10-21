@@ -37,6 +37,7 @@ Read `CLAUDE.md`, `AGENTS.md`, `MEMORY.md` in repo root and each touched subrepo
 8. **Mechanical scan** — apply 2h below.
 9. **Structural quality** — apply 2i below.
 10. **Over-engineering** — apply 2j below.
+11. **Security audit (prod PRs)** — apply 2k below.
 
 ### 2g. Test quality
 If the PR adds tests, apply the authoring gate:
@@ -75,6 +76,31 @@ For each new addition in the diff, climb the Ponytail ladder:
 - One line? Then one line.
 
 Flag new deps where existing ones work, wrapper functions around native APIs, multi-file additions for simple logic.
+
+### 2k. Security audit (prod PRs only)
+
+If the PR base branch is main, master, or production:
+
+1. Identify which attack classes are relevant based on changed files:
+   - Routes/API/middleware → run web-protocol-and-auth checks
+   - Payment, wallet, ledger, settlement → run data-isolation-and-lifecycle checks
+   - Auth, session, token → run web-protocol-and-auth + client-side checks
+   - package.json, dependencies → run supply-chain-and-release checks
+   - Lambda, infra, deploy configs → run cloud-and-deployment checks
+   - If unsure → run core attack classes only
+
+2. Scope to changed files only — don't audit the full codebase on a PR review.
+
+3. For each finding from the security audit:
+   - confirmed → CRITICAL in the review findings table
+   - needs_validation → WARNING with the exact unresolved fact noted
+   - rejected → drop silently
+
+4. Append security findings to the main review output under a "Security Audit" section.
+
+Security audit findings are exempt from the cite rule below — the audit's source trace is the evidence.
+
+If the PR targets dev, staging, or feature branches → skip this step entirely.
 
 **Finding rule:** every finding MUST cite existing code (`file:line`) that establishes the right pattern. **No cite → NOTE at most, never WARNING or CRITICAL.** Prefer a clarifying question over an assumption — when you don't know why the author did something, ask it in the report rather than asserting it's wrong.
 
