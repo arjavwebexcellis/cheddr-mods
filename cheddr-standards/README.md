@@ -31,6 +31,21 @@ claude plugin install cheddr-standards@cheddr-mods
 cp CLAUDE.md.template ./CLAUDE.md
 ```
 
+## Quick setup (recommended)
+
+Run the setup script to install all recommended plugins at once:
+
+```bash
+curl -sL https://raw.githubusercontent.com/arjavwebexcellis/cheddr-mods/main/cheddr-standards/setup.sh | bash
+```
+
+Or clone and run locally:
+```bash
+git clone git@github.com:arjavwebexcellis/cheddr-mods.git
+cd cheddr-mods/cheddr-standards
+bash setup.sh
+```
+
 ## Install
 
 ```bash
@@ -49,6 +64,7 @@ Update later with `claude plugin marketplace update cheddr-mods`.
 | `/adversarial-review` | Self-review your own diff before committing. Learns the codebase's conventions first; every finding cites existing code. Saves to `.claude/reviews/`. |
 | `/pr-review <number>` | Review someone else's PR. Convention baseline, cited findings, round-based re-reviews. Local only — never posts to GitHub. Output: `.claude/reviews/pr-<number>/round-<N>.md` (+ `.html` with answer-me-with-html). |
 | `/verify-loop` | Plan → change → verify (type-check, lint, tests, build, smoke) → ready. Inapplicable steps are marked N/A, never silently skipped. |
+| `/lean-audit` | Find code that shouldn't exist. Returns a delete-list. |
 
 ### Agents
 

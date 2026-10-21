@@ -36,6 +36,7 @@ Read `CLAUDE.md`, `AGENTS.md`, `MEMORY.md` in repo root and each touched subrepo
 7. **Test quality** — apply 2g below.
 8. **Mechanical scan** — apply 2h below.
 9. **Structural quality** — apply 2i below.
+10. **Over-engineering** — apply 2j below.
 
 ### 2g. Test quality
 If the PR adds tests, apply the authoring gate:
@@ -64,6 +65,16 @@ Per changed function:
 - Any thin wrappers or identity abstractions adding indirection without clarity?
 
 Structural and size findings (file too big, simpler framing, spaghetti growth) don't require a cite — they're measured, not convention-compared.
+
+### 2j. Over-engineering check
+For each new addition in the diff, climb the Ponytail ladder:
+- Does this need to exist? Could it be inline?
+- Already in codebase? (grep first)
+- Stdlib does it? Don't wrap it.
+- Installed dep does it? Don't add another.
+- One line? Then one line.
+
+Flag new deps where existing ones work, wrapper functions around native APIs, multi-file additions for simple logic.
 
 **Finding rule:** every finding MUST cite existing code (`file:line`) that establishes the right pattern. **No cite → NOTE at most, never WARNING or CRITICAL.** Prefer a clarifying question over an assumption — when you don't know why the author did something, ask it in the report rather than asserting it's wrong.
 

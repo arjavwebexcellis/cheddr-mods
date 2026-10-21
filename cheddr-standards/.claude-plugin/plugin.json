@@ -2,6 +2,6 @@
   "name": "cheddr-standards",
   "version": "1.0.0",
   "description": "Engineering standards for Cheddr — convention-aware reviews, verification loops, model-routed agents.",
-  "skills": ["./skills/adversarial-review", "./skills/pr-review", "./skills/verify-loop"],
+  "skills": ["./skills/adversarial-review", "./skills/pr-review", "./skills/verify-loop", "./skills/lean-audit"],
   "agents": ["./agents/investigator.md", "./agents/reviewer.md", "./agents/review-quick.md", "./agents/review-deep.md"]
 }

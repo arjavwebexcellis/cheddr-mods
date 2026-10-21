@@ -76,6 +76,17 @@ Don't settle for "this could be cleaner." Look for the move that makes the code 
 
 Structural and size findings (file too big, simpler framing, spaghetti growth) don't require a cite — they're measured, not convention-compared.
 
+### Over-engineering check (Ponytail ladder)
+For each new function, class, or module in the diff:
+1. Does this need to exist? Could the caller do it inline?
+2. Is there already something in the codebase that does this? Grep before adding.
+3. Does stdlib/runtime handle it? (Buffer, URL, crypto, path — don't wrap them)
+4. Is a native platform feature available? (don't install a dep for what the platform gives you)
+5. Is an installed dependency already doing this? (don't add a second one)
+6. Can it be one line? If yes, it should be one line.
+
+Flag: unnecessary abstractions, wrapper functions around stdlib, new dependencies where existing ones suffice, multi-file additions for what could be a helper.
+
 ## Step 4 — Output
 
 Write the review as markdown. If the output is complex enough (several findings, or a table), invoke the answer-me-with-html skill to convert it to HTML next to the markdown: `am render <file>.md -o <file>.html --no-open --style off`. Don't write HTML manually.
