@@ -38,6 +38,7 @@ Read `CLAUDE.md`, `AGENTS.md`, `MEMORY.md` in repo root and each touched subrepo
 9. **Structural quality** — apply 2i below.
 10. **Over-engineering** — apply 2j below.
 11. **Security audit (prod PRs)** — apply 2k below.
+12. **Analytics coverage** — apply 2l below.
 
 ### 2g. Test quality
 If the PR adds tests, apply the authoring gate:
@@ -101,6 +102,18 @@ If the PR base branch is main, master, or production:
 Security audit findings are exempt from the cite rule below — the audit's source trace is the evidence.
 
 If the PR targets dev, staging, or feature branches → skip this step entirely.
+
+### 2l. Analytics coverage
+
+For each user-facing change in the PR:
+- New screen/modal/flow? → check for Mixpanel screen_view event
+- New CTA/action? → check for Mixpanel tap event
+- New purchase/payment? → check for AppsFlyer revenue event
+- New user state? → check for Braze attribute/trigger
+- Removed flow? → check old events are deprecated
+
+Cite the existing naming convention from analyticsEvents.ts. Flag gaps as WARNING.
+AppsFlyer is revenue ONLY — never suggest engagement events for it.
 
 **Finding rule:** every finding MUST cite existing code (`file:line`) that establishes the right pattern. **No cite → NOTE at most, never WARNING or CRITICAL.** Prefer a clarifying question over an assumption — when you don't know why the author did something, ask it in the report rather than asserting it's wrong.
 

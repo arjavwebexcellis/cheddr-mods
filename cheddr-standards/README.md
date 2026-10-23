@@ -34,6 +34,7 @@ cp ~/.claude/plugins/marketplaces/cheddr-mods/cheddr-standards/CLAUDE.md.templat
 | `/verify-loop` | Verification loop for code changes. Plan → change → verify (tests, lint, type-check) → ready. Stack-aware — detects JS/TS, build steps, test wiring, DB reachability. |
 | `/lean-audit` | Find code that shouldn't exist. Climbs the laziness ladder: does it need to exist → reuse → stdlib → one line. Returns a prioritized delete-list. |
 | `/security-check` | Security audit on changes or full codebase. Routes to relevant attack classes. Wraps Cloudflare's security-audit skill. Runs automatically on prod PR reviews. |
+| `/analytics-check` | Audit changes for missing Mixpanel, AppsFlyer, and Braze instrumentation. Checks naming conventions against existing tracking plan. |
 
 ### Agents
 
@@ -112,7 +113,8 @@ cheddr-standards/
 │   ├── pr-review/SKILL.md
 │   ├── verify-loop/SKILL.md
 │   ├── lean-audit/SKILL.md
-│   └── security-check/SKILL.md
+│   ├── security-check/SKILL.md
+│   └── analytics-check/SKILL.md
 ├── agents/
 │   ├── investigator.md
 │   ├── reviewer.md

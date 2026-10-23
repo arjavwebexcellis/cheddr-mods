@@ -73,6 +73,8 @@ echo "  /adversarial-review  — convention-aware self-review"
 echo "  /pr-review <number>  — PR review with HTML output"
 echo "  /verify-loop         — plan → change → verify → ready"
 echo "  /lean-audit          — find code that shouldn't exist"
+# analytics-check ships with cheddr-standards — no separate install needed
+echo "  /analytics-check     — find missing Mixpanel/AppsFlyer/Braze events"
 echo "  /diagnosing-bugs     — structured debugging"
 echo "  /grill-me            — interview before building"
 echo ""
