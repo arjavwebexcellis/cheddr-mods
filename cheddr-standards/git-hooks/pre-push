@@ -1,13 +1,17 @@
 #!/bin/sh
-# Reject pushes that would publish commits carrying a Claude/Anthropic co-author trailer.
-# Only checks commits not yet on any remote, so history that is already pushed never blocks.
+# Reject pushes that would publish commits carrying a Claude/Anthropic co-author trailer or footer.
+# Only checks commits not already on the destination or any remote, so pushed history never blocks.
 zero=0000000000000000000000000000000000000000
 status=0
 while read -r local_ref local_sha remote_ref remote_sha; do
   [ "$local_sha" = "$zero" ] && continue
-  bad=$(git log -i -E --grep='^co-authored-by:.*(claude|anthropic)' --grep='noreply@anthropic\.com' --format='  %h %s' "$local_sha" --not --remotes)
+  # Push by URL has no remote-tracking refs; exclude the destination tip when we have it locally.
+  exclude=
+  git cat-file -e "$remote_sha^{commit}" 2>/dev/null && exclude="^$remote_sha"
+  bad=$(git log -i -E --grep='^co-authored-by:.*(claude|anthropic)' --grep='noreply@anthropic\.com' \
+    --grep='generated with \[?claude code' --format='  %h %s' "$local_sha" $exclude --not --remotes)
   if [ -n "$bad" ]; then
-    echo "Push blocked: these commits carry a Claude/Anthropic Co-Authored-By trailer:" >&2
+    echo "Push blocked: these commits carry Claude/Anthropic attribution:" >&2
     echo "$bad" >&2
     echo "Fix with: git rebase -i <base>  (reword each), or git commit --amend for the last one." >&2
     status=1

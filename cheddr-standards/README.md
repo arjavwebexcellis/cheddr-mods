@@ -90,7 +90,7 @@ For non-Claude agents, copy the adapter file for your agent from this repo into 
 
 Three layers, so one missed setup step doesn't leak a trailer:
 
-1. **Claude Code hook (automatic).** Installing the plugin adds a `PreToolUse` hook (`hooks/block-ai-attribution.sh`) that blocks any `git commit` / `gh pr` command carrying a Claude/Anthropic trailer, in every repo.
+1. **Claude Code hook (automatic).** Installing the plugin adds a `PreToolUse` hook (`hooks/block_ai_attribution.py`, needs `python3`) that blocks any `git commit` / `gh pr` command carrying a Claude/Anthropic trailer, in every repo.
 2. **Claude Code settings.** `setup.sh` sets `"attribution": {"commit": "", "pr": ""}` in `~/.claude/settings.json` so Claude stops adding the trailer at all. Not using the script? Add that key yourself.
 3. **Git hooks (catches Cursor, Copilot, manual commits).** `git-hooks/commit-msg` rejects the message; `git-hooks/pre-push` rejects any not-yet-pushed commit that has one (already-pushed history never blocks). The app repos use husky, which overrides a global `core.hooksPath`, so the hooks are committed per repo:
 
