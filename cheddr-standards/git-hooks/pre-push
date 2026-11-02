@@ -1,0 +1,16 @@
+#!/bin/sh
+# Reject pushes that would publish commits carrying a Claude/Anthropic co-author trailer.
+# Only checks commits not yet on any remote, so history that is already pushed never blocks.
+zero=0000000000000000000000000000000000000000
+status=0
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ "$local_sha" = "$zero" ] && continue
+  bad=$(git log -i -E --grep='^co-authored-by:.*(claude|anthropic)' --grep='noreply@anthropic\.com' --format='  %h %s' "$local_sha" --not --remotes)
+  if [ -n "$bad" ]; then
+    echo "Push blocked: these commits carry a Claude/Anthropic Co-Authored-By trailer:" >&2
+    echo "$bad" >&2
+    echo "Fix with: git rebase -i <base>  (reword each), or git commit --amend for the last one." >&2
+    status=1
+  fi
+done
+exit $status
