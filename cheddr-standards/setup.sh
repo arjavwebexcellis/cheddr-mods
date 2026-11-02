@@ -65,6 +65,16 @@ grep -q "CLAUDE_MEM_PROJECT_NAME_SOURCE" ~/.zshrc 2>/dev/null || {
   echo "  ✓ Added git-remote memory sharing to .zshrc"
 }
 
+# Never attribute commits or PRs to Claude (includeCoAuthoredBy is the pre-attribution key, kept for older versions)
+python3 - <<'PY' && echo "  ✓ Disabled Claude co-author and PR attribution" || echo "  ! Could not update ~/.claude/settings.json; add \"attribution\": {\"commit\": \"\", \"pr\": \"\"} manually"
+import json, os
+path = os.path.expanduser("~/.claude/settings.json")
+settings = json.load(open(path)) if os.path.exists(path) else {}
+settings["attribution"] = {"commit": "", "pr": ""}
+settings["includeCoAuthoredBy"] = False
+json.dump(settings, open(path, "w"), indent=2)
+PY
+
 echo ""
 echo "=== Setup complete ==="
 echo ""

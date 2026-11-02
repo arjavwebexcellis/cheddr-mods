@@ -84,6 +84,23 @@ For non-Claude agents, copy the adapter file for your agent from this repo into 
 - **Mechanical scan** — null paths, async error handling, dead branches, off-by-one.
 - **Structural quality** — files over 1000 lines are flagged. Spaghetti growth blocked.
 - **Model routing** — Opus/Fable for planning, Sonnet for implementation/review, Haiku for scanning.
+- **No AI attribution** — no `Co-Authored-By: Claude` trailers or "Generated with Claude Code" lines in commits or PRs. Enforced below.
+
+## No AI co-author trailers
+
+Three layers, so one missed setup step doesn't leak a trailer:
+
+1. **Claude Code hook (automatic).** Installing the plugin adds a `PreToolUse` hook (`hooks/block_ai_attribution.py`, needs `python3`) that blocks any `git commit` / `gh pr` command carrying a Claude/Anthropic trailer, in every repo.
+2. **Claude Code settings.** `setup.sh` sets `"attribution": {"commit": "", "pr": ""}` in `~/.claude/settings.json` so Claude stops adding the trailer at all. Not using the script? Add that key yourself.
+3. **Git hooks (catches Cursor, Copilot, manual commits).** `git-hooks/commit-msg` rejects the message; `git-hooks/pre-push` rejects any not-yet-pushed commit that has one (already-pushed history never blocks). The app repos use husky, which overrides a global `core.hooksPath`, so the hooks are committed per repo:
+
+   ```bash
+   cp ~/.claude/plugins/marketplaces/cheddr-mods/cheddr-standards/git-hooks/{commit-msg,pre-push} .husky/
+   ```
+
+   For a repo without husky: `git config core.hooksPath ~/.claude/plugins/marketplaces/cheddr-mods/cheddr-standards/git-hooks`.
+
+Blocked commit? Reword it: `git commit --amend` for the last one, `git rebase -i <base>` for older ones.
 
 ## Optional: HTML review output
 
@@ -120,6 +137,8 @@ cheddr-standards/
 │   ├── reviewer.md
 │   ├── review-quick.md
 │   └── review-deep.md
+├── hooks/                              # Claude Code hook: blocks AI co-author trailers
+├── git-hooks/                          # commit-msg + pre-push: same rule for any tool
 └── .claude-plugin/plugin.json
 ```
 
